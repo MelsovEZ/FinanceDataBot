@@ -1,0 +1,12 @@
+node_modules/
+*/node_modules/
+*/modules/
+modules/
+.git
+coverage/
+.dockerignore
+Dockerfile
+.gitignore
+.env
+.eslintrc
+.editorconfig

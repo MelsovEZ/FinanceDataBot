@@ -1,0 +1,8 @@
+services:
+  bot:
+    build: .
+    container_name: finance_data_bot
+    env_file: .env
+    volumes:
+      - .:/app
+    restart: always

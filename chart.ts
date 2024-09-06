@@ -79,6 +79,6 @@ export async function generateAndDownloadChart(data: string[][], selectedType: s
         const filePath = path.join(__dirname, 'chart.png');
         await fs.promises.writeFile(filePath, buffer);
     } catch (error) {
-        console.error('Error generating or downloading chart:', error);
+        console.error('Ошибка при генерации или скачивании графика:', error);
     }
 }

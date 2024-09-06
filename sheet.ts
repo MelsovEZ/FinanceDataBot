@@ -38,6 +38,6 @@ export async function readSheet(googleSheetPage: string) {
         return infoObjectFromSheet.data.values;
     }
     catch (err) {
-        console.error("readSheet func() error", err);
+        console.error(`Ошибка при чтении данных с таблицы ${googleSheetPage}`, err);
     }
 }

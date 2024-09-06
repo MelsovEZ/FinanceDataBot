@@ -1,5 +1,5 @@
 import { Telegraf, Markup } from 'telegraf';
-import { readSheet, getSheetNames } from './excel';
+import { readSheet, getSheetNames } from './sheet';
 import { generateAndDownloadChart } from './chart';
 import 'dotenv/config';
 

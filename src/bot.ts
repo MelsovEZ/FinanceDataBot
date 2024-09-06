@@ -30,51 +30,50 @@ async function updateCompanies() {
 function generateHandlers() {
     const dataTypes = ['Доходы', 'Расходы', 'Прибыль', 'КПН', 'Все данные'];
 
-    companies.forEach((company, index) => {
-        bot.action(`company_${index + 1}`, async (ctx) => {
+    companies.forEach((company) => {
+        bot.action(`company_${company}`, async (ctx) => {
             await ctx.deleteMessage(); // Удаляем предыдущее сообщение
             await ctx.reply(`Вы выбрали "${company}". Выберите тип данных:`, Markup.inlineKeyboard([
-                ...dataTypes.map((dataType, dataIndex) => [Markup.button.callback(dataType, `dataType_${index + 1}_${dataIndex + 1}`)]),
-                [Markup.button.callback('Назад', `back_to_companies_${index + 1}`)] // Добавляем кнопку "Назад"
+                ...dataTypes.map((dataType) => [Markup.button.callback(dataType, `dataType_${company}_${dataType}`)]),
+                [Markup.button.callback('Назад', `back_to_companies_${company}`)] // Добавляем кнопку "Назад"
             ]));
         });
 
         // Обработчик для выбора типа данных
-        dataTypes.forEach((dataType, dataIndex) => {
-            bot.action(`dataType_${index + 1}_${dataIndex + 1}`, async (ctx) => {
+        dataTypes.forEach((dataType) => {
+            bot.action(`dataType_${company}_${dataType}`, async (ctx) => {
                 try {
                     await ctx.deleteMessage(); // Удаляем предыдущее сообщение
-                    const selectedType = dataTypes[dataIndex];
-                    const loadingMessage = await ctx.reply(`Вы выбрали "${company}" и тип данных "${selectedType}". Пожалуйста, подождите...`);
+                    const loadingMessage = await ctx.reply(`Вы выбрали "${company}" и тип данных "${dataType}". Пожалуйста, подождите...`);
                     const data = await readSheet(company);
-                    await generateAndDownloadChart(data, selectedType);
+                    await generateAndDownloadChart(data, dataType);
                     await ctx.deleteMessage(loadingMessage.message_id);
-                    await ctx.replyWithPhoto({ source: './chart.png' }, Markup.inlineKeyboard([
-                        [Markup.button.callback('Назад', `back_to_dataTypes_${index + 1}`)]
+                    await ctx.replyWithPhoto({ source: './src/chart.png' }, Markup.inlineKeyboard([
+                        [Markup.button.callback('Назад', `back_to_dataTypes_${company}`)]
                     ]));
                 } catch (error) {
                     console.error(error);
                     ctx.reply('Произошла ошибка. Попробуйте позже.', Markup.inlineKeyboard([
-                        [Markup.button.callback('Назад', `back_to_dataTypes_${index + 1}`)]
+                        [Markup.button.callback('Назад', `back_to_dataTypes_${company}`)]
                     ]));
                 }
             });
         });
 
         // Обработчик для кнопки "Назад" при выборе компании
-        bot.action(`back_to_companies_${index + 1}`, async (ctx) => {
+        bot.action(`back_to_companies_${company}`, async (ctx) => {
             await ctx.deleteMessage();
             await ctx.reply('Выберите компанию:', Markup.inlineKeyboard(
-                companies.map((company, index) => [Markup.button.callback(company, `company_${index + 1}`)])
+                companies.map((company) => [Markup.button.callback(company, `company_${company}`)])
             ));
         });
 
         // Обработчик для кнопки "Назад" при выборе типа данных
-        bot.action(`back_to_dataTypes_${index + 1}`, async (ctx) => {
+        bot.action(`back_to_dataTypes_${company}`, async (ctx) => {
             await ctx.deleteMessage();
             await ctx.reply(`Вы выбрали "${company}". Выберите тип данных:`, Markup.inlineKeyboard([
-                ...dataTypes.map((dataType, dataIndex) => [Markup.button.callback(dataType, `dataType_${index + 1}_${dataIndex + 1}`)]),
-                [Markup.button.callback('Назад', `back_to_companies_${index + 1}`)]
+                ...dataTypes.map((dataType) => [Markup.button.callback(dataType, `dataType_${company}_${dataType}`)]),
+                [Markup.button.callback('Назад', `back_to_companies_${company}`)]
             ]));
         });
     });
@@ -109,7 +108,7 @@ async function initializeBot() {
         // Обработчик для кнопки "Показать компании"
         bot.hears('Показать компании', (ctx) => {
             ctx.reply('Выберите компанию:', Markup.inlineKeyboard(
-                companies.map((company, index) => [Markup.button.callback(company, `company_${index + 1}`)])
+                companies.map((company) => [Markup.button.callback(company, `company_${company}`)])
             ));
         });
 

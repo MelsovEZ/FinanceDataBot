@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node bot.ts",
-    "dev": "npx nodemon bot.ts"
+    "start": "npx ts-node src/bot.ts",
+    "dev": "npx nodemon src/bot.ts"
   },
   "keywords": [],
   "author": "",
